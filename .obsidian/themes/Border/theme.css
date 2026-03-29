@@ -9265,8 +9265,11 @@ body {
 /* 3. 实时预览模式 (Live Preview) - Mac 全模式统一版 (V11) */
 .markdown-source-view.mod-cm6 .HyperMD-codeblock {
     background-image: none !important;
+    background-color: var(--code-background) !important;
     border-left: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
     border-right: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
 }
 
 .markdown-source-view.mod-cm6 .HyperMD-codeblock-begin {
@@ -9277,6 +9280,8 @@ body {
     position: relative !important;
     padding-top: 34px !important;
     /* 给标题栏留位 */
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
 }
 
 /* 实时预览模式下的 Mac 圆点头 */
@@ -9305,6 +9310,10 @@ body {
     border-bottom-left-radius: 12px !important;
     border-bottom-right-radius: 12px !important;
     border-bottom: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
+    background-color: var(--code-background) !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    padding-bottom: 1rem !important;
 }
 
 /* ============================================================
@@ -9636,6 +9645,8 @@ body {
     white-space: pre !important;
     word-break: normal !important;
     overflow-wrap: normal !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
 }
 
 /* 4. 代码块背景彻底除噪 与 Mac 窗口控件 (阅读模式专供) */

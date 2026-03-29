@@ -9263,49 +9263,25 @@ body {
     pointer-events: none;
 }
 
-/* 3. 实时预览模式 (Live Preview) */
+/* 3. 实时预览模式 (Live Preview) - 极致稳定性版 */
 .markdown-source-view.mod-cm6 .HyperMD-codeblock {
     background-image: none !important;
-    /* 强制移除纹理 */
-    border-left: 1px solid var(--background-modifier-border) !important;
-    border-right: 1px solid var(--background-modifier-border) !important;
-    padding-left: 12px !important;
+    border-left: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
+    border-right: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
 }
 
 .markdown-source-view.mod-cm6 .HyperMD-codeblock-begin {
     border-top-left-radius: 8px !important;
     border-top-right-radius: 8px !important;
-    padding-top: 30px !important;
-    margin-top: 12px !important;
-    position: relative;
-    border-top: 1px solid var(--background-modifier-border) !important;
-    background-color: color-mix(in srgb, var(--interactive-accent), transparent 88%) !important;
-}
-
-.markdown-source-view.mod-cm6 .HyperMD-codeblock-begin::after {
-    content: " ";
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    width: 40px;
-    height: 10px;
-    background-image: radial-gradient(circle, #ff5f56 4px, transparent 5px),
-        radial-gradient(circle, #ffbd2e 4px, transparent 5px),
-        radial-gradient(circle, #27c93f 4px, transparent 5px);
-    background-size: 12px 12px;
-    background-position: 0 center, 14px center, 28px center;
-    background-repeat: no-repeat;
-    opacity: 0.8;
-    pointer-events: none;
-    z-index: 5;
+    border-top: 1.5px solid color-mix(in srgb, var(--interactive-accent), transparent 80%) !important;
+    /* 严格禁止 padding-top 以保护光标坐标 */
+    background-color: color-mix(in srgb, var(--interactive-accent), transparent 94%) !important;
 }
 
 .markdown-source-view.mod-cm6 .HyperMD-codeblock-end {
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
-    margin-bottom: 12px !important;
-    border-bottom: 1px solid var(--background-modifier-border) !important;
+    border-bottom: 1.5px solid color-mix(in srgb, var(--interactive-accent), transparent 80%) !important;
 }
 
 /* ============================================================
@@ -9607,22 +9583,46 @@ body {
     overflow-wrap: normal !important;
 }
 
-/* 4. 代码块背景彻底除噪 (无麻点) */
-.markdown-rendered pre,
-.markdown-source-view.mod-cm6 .cm-scroller,
-.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+/* 4. 代码块背景彻底除噪 与 Mac 窗口控件 (阅读模式专供) */
+.markdown-rendered pre {
     background-image: none !important;
     background-position: unset !important;
     background-repeat: no-repeat !important;
     background-size: unset !important;
+    position: relative !important;
+    padding-top: 38px !important; /* 顶部留出 Mac 标题栏空间 */
+    border-radius: 12px !important;
+    border: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
+    background-color: var(--code-background) !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-rendered pre::before {
+    content: " " !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 32px !important;
+    background-color: color-mix(in srgb, var(--interactive-accent), transparent 90%) !important;
+    background-image: radial-gradient(circle, #ff5f56 5px, transparent 6px),
+                      radial-gradient(circle, #ffbd2e 5px, transparent 6px),
+                      radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
+    background-size: 14px 14px !important;
+    background-position: 14px center, 34px center, 54px center !important;
+    background-repeat: no-repeat !important;
+    border-bottom: 0.5px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
+    z-index: 10 !important;
 }
 
 /* 5. 修改全局代码块背景变量 */
 body {
-    --code-background: color-mix(in srgb, var(--interactive-accent), transparent 97.5%) !important;
+    --code-background: color-mix(in srgb, var(--interactive-accent), transparent 96.5%) !important;
 }
 
-/* 6. 代码块 IDE 风格横向/纵向滚动条 */
+/* 6. 代码块 IDE 风格滚动条 */
 .markdown-rendered pre::-webkit-scrollbar,
 .markdown-source-view.mod-cm6 .cm-scroller::-webkit-scrollbar {
     width: 6px !important;
@@ -9635,13 +9635,11 @@ body {
     border-radius: 10px !important;
 }
 
-.markdown-rendered pre::-webkit-scrollbar-thumb:hover,
-.markdown-source-view.mod-cm6 .cm-scroller::-webkit-scrollbar-thumb:hover {
+.markdown-rendered pre::-webkit-scrollbar-thumb:hover {
     background-color: var(--interactive-accent) !important;
 }
 
-.markdown-rendered pre::-webkit-scrollbar-track,
-.markdown-source-view.mod-cm6 .cm-scroller::-webkit-scrollbar-track {
+.markdown-rendered pre::-webkit-scrollbar-track {
     background: transparent !important;
 }
 

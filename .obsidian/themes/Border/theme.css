@@ -10027,3 +10027,33 @@ body {
     background-color: color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
     box-shadow: inset 0 0 0 1px var(--interactive-accent) !important;
 }
+/* ============================================================
+   7. PDF 导出专项适配 (Mac 代码块三色圆点与阴影修复) (V14)
+   ============================================================ */
+@media print {
+    /* 1. 移除 PDF 中的黑色块状阴影，改用纯净细边框 */
+    .markdown-rendered pre {
+        box-shadow: none !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background-color: var(--code-background) !important;
+    }
+
+    /* 2. 强制 PDF 导出引擎渲染 Mac 三色圆点按钮 */
+    .markdown-rendered pre::before {
+        content: " " !important;
+        display: block !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        /* 重新声明圆点背景，防止被打印模式丢弃 */
+        background-image: radial-gradient(circle, #ff5f56 5px, transparent 6px),
+                          radial-gradient(circle, #ffbd2e 5px, transparent 6px),
+                          radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
+        background-size: 14px 14px !important;
+        background-position: 14px center, 34px center, 54px center !important;
+        background-repeat: no-repeat !important;
+        opacity: 1 !important;
+        z-index: 10 !important;
+    }
+}

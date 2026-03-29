@@ -9331,19 +9331,28 @@ body {
     margin-bottom: 0.8em !important;
 }
 
-/* ---------- H1: 居中下划线风格 ---------- */
+/* ---------- H1: 居中下划线风格 (兼容维护版) ---------- */
 .markdown-rendered h1,
 .markdown-source-view.mod-cm6 .HyperMD-header-1 {
-    display: table !important;
-    width: auto !important;
-    min-width: 120px !important;
     text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
     padding-bottom: 12px !important;
     font-size: 2.1rem !important;
     font-weight: 800 !important;
     color: var(--interactive-accent) !important;
+}
+
+/* 仅在阅读模式应用 table 布局以维持下划线收缩，编辑模式必须 block 以保护光标 */
+.markdown-rendered h1 {
+    display: table !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: auto !important;
+    min-width: 120px !important;
+}
+
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+    display: block !important;
+    width: 100% !important;
 }
 
 .markdown-rendered h1::after,
@@ -9358,6 +9367,7 @@ body {
     background: var(--interactive-accent) !important;
     transform: translateX(-50%) !important;
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease !important;
+    pointer-events: none !important; /* 防止遮挡点击 */
 }
 
 .markdown-rendered h1:hover,
@@ -9392,6 +9402,7 @@ body {
     border-radius: 4px !important;
     opacity: 0.8 !important;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    pointer-events: none !important;
 }
 
 .markdown-rendered h2::after,
@@ -9407,6 +9418,7 @@ body {
     border-radius: 2px !important;
     opacity: 0.5 !important;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.05s !important;
+    pointer-events: none !important;
 }
 
 .markdown-rendered h2:hover::before,
@@ -9436,6 +9448,7 @@ body {
     height: 1.1rem !important;
     background: var(--interactive-accent) !important;
     border-radius: 2px !important;
+    pointer-events: none !important;
 }
 
 /* H4: 实心圆 */
@@ -9456,6 +9469,7 @@ body {
     height: 8px !important;
     background-color: var(--interactive-accent) !important;
     border-radius: 50% !important;
+    pointer-events: none !important;
 }
 
 /* H5: 空心圆 */
@@ -9478,6 +9492,7 @@ body {
     background-color: transparent !important;
     border-radius: 50% !important;
     box-sizing: border-box !important;
+    pointer-events: none !important;
 }
 
 /* H6: 短横线 */
@@ -9497,6 +9512,7 @@ body {
     transform: translateY(-50%) !important;
     color: var(--interactive-accent) !important;
     font-weight: bold !important;
+    pointer-events: none !important;
 }
 
 /* H3-H6 后缀图标 (Mask Image) */

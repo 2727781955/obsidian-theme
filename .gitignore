@@ -1,3 +1,8 @@
-workspace.json
-workspace-mobile.json
 .DS_Store
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.obsidian/indexed-db/
+.obsidian/plugins/
+.obsidian/obsidian.log
+node_modules/

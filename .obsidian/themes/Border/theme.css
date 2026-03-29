@@ -7446,7 +7446,6 @@ body:not(.collapse-icon-restore) :is(.markdown-rendered, .markdown-preview-view)
     color: var(--h5-accent-color);
 }
 
-h6,
 .markdown-rendered h6,
 .HyperMD-header-6,
 .inline-title[data-level='6'],
@@ -7525,7 +7524,7 @@ body:not(.collapse-icon-restore) .is-live-preview .HyperMD-header-6 .collapse-in
 body:not(.collapse-icon-restore) :is(.markdown-rendered, .markdown-preview-view) h6 .collapse-indicator.collapse-icon svg {
     transform: translateX(0px);
     background-color: currentColor;
-    -webkit-mask-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg id="svg0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><defs><style>.cls-1{fill:none;}</style></defs><rect class="cls-1" width="10" height="10"/><path d="M0,1H1.11v3.43H3.33V1h1.11V9h-1.11v-3.43H1.11v3.43H0V1Zm6.67,0h2.22c.29,0,.58,.12,.79,.33,.21,.21,.33,.51,.33,.81v.57h-1.11v-.57h-2.22v2.29h2.22c.29,0,.58,.12,.79,.33,.21,.21,.33,.51,.33,.81v2.29c0,.3-.12,.59-.33,.81-.21,.21-.49,.33-.79,.33h-2.22c-.29,0-.58-.12-.79-.33-.21-.21-.33-.51-.33-.81V2.14c0-.3,.12-.59,.33-.81,.21-.21,.49-.33,.79-.33Zm0,4.57v2.29h2.22v-2.29h-2.22Z"/></svg>')
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg id="svg0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><defs><style>.cls-1{fill:none;}</style></defs><rect class="cls-1" width="10" height="10"/><path d="M0,1H1.11v3.43H3.33V1h1.11V9h-1.11v-3.43H1.11v3.43H0V1Zm6.67,0h2.22c.29,0,.58,.12,.79,.33,.21,.21,.33,.51,.33,.81v.57h-1.11v-.57h-2.22v2.29h2.22c.29,0,.58,.12,.79,.33,.21,.21,.33,.51,.33,.81v2.29c0,.3-.12,.59-.33,.81-.21,.21-.49,.33-.79,.33h-2.22c-.29,0,.58-.12,.79-.33-.21-.21-.33-.51-.33-.81V2.14c0-.3,.12-.59,.33-.81,.21-.21,.49-.33,.79-.33Zm0,4.57v2.29h2.22v-2.29h-2.22Z"/></svg>')
 }
 
 body:not(.collapse-icon-restore) .is-live-preview .HyperMD-header-6 .is-collapsed .collapse-indicator.collapse-icon svg,
@@ -9276,7 +9275,8 @@ body {
     border-top: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
     background-color: var(--code-background) !important;
     position: relative !important;
-    padding-top: 34px !important; /* 给标题栏留位 */
+    padding-top: 34px !important;
+    /* 给标题栏留位 */
 }
 
 /* 实时预览模式下的 Mac 圆点头 */
@@ -9290,14 +9290,15 @@ body {
     height: 28px !important;
     background-color: color-mix(in srgb, var(--interactive-accent), transparent 90%) !important;
     background-image: radial-gradient(circle, #ff5f56 5px, transparent 6px),
-                      radial-gradient(circle, #ffbd2e 5px, transparent 6px),
-                      radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
+        radial-gradient(circle, #ffbd2e 5px, transparent 6px),
+        radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
     background-size: 14px 14px !important;
     background-position: 14px center, 34px center, 54px center !important;
     background-repeat: no-repeat !important;
     border-bottom: 0.5px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
     z-index: 10 !important;
-    pointer-events: none !important; /* 关键：防止遮挡点击 */
+    pointer-events: none !important;
+    /* 关键：防止遮挡点击 */
 }
 
 .markdown-source-view.mod-cm6 .HyperMD-codeblock-end {
@@ -9322,16 +9323,23 @@ body {
 .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
 .markdown-source-view.mod-cm6 :is(.HyperMD-header-1, .HyperMD-header-2, .HyperMD-header-3, .HyperMD-header-4, .HyperMD-header-5, .HyperMD-header-6) {
     position: relative !important;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    transition: none !important; /* 编辑模式禁用 transition 防止坐标抖动 */
     border-bottom: none !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-    /* 清除所有内边距，确保装饰线对齐文字中心 */
+}
+
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6) {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     margin-top: 1.8em !important;
     margin-bottom: 0.8em !important;
 }
 
-/* ---------- H1: 居中下划线风格 (兼容维护版) ---------- */
+.markdown-source-view.mod-cm6 :is(.HyperMD-header-1, .HyperMD-header-2, .HyperMD-header-3, .HyperMD-header-4, .HyperMD-header-5, .HyperMD-header-6) {
+    margin: 0 !important; /* 核心：CM6 严禁 line margin */
+}
+
+/* ---------- H1: 居中下划线风格 ---------- */
 .markdown-rendered h1,
 .markdown-source-view.mod-cm6 .HyperMD-header-1 {
     text-align: center !important;
@@ -9341,13 +9349,12 @@ body {
     color: var(--interactive-accent) !important;
 }
 
-/* 仅在阅读模式应用 table 布局以维持下划线收缩，编辑模式必须 block 以保护光标 */
 .markdown-rendered h1 {
     display: table !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
     width: auto !important;
     min-width: 120px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .markdown-source-view.mod-cm6 .HyperMD-header-1 {
@@ -9367,7 +9374,7 @@ body {
     background: var(--interactive-accent) !important;
     transform: translateX(-50%) !important;
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease !important;
-    pointer-events: none !important; /* 防止遮挡点击 */
+    pointer-events: none !important;
 }
 
 .markdown-rendered h1:hover,
@@ -9402,7 +9409,6 @@ body {
     border-radius: 4px !important;
     opacity: 0.8 !important;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    pointer-events: none !important;
 }
 
 .markdown-rendered h2::after,
@@ -9418,7 +9424,6 @@ body {
     border-radius: 2px !important;
     opacity: 0.5 !important;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.05s !important;
-    pointer-events: none !important;
 }
 
 .markdown-rendered h2:hover::before,
@@ -9448,7 +9453,6 @@ body {
     height: 1.1rem !important;
     background: var(--interactive-accent) !important;
     border-radius: 2px !important;
-    pointer-events: none !important;
 }
 
 /* H4: 实心圆 */
@@ -9469,7 +9473,6 @@ body {
     height: 8px !important;
     background-color: var(--interactive-accent) !important;
     border-radius: 50% !important;
-    pointer-events: none !important;
 }
 
 /* H5: 空心圆 */
@@ -9492,7 +9495,6 @@ body {
     background-color: transparent !important;
     border-radius: 50% !important;
     box-sizing: border-box !important;
-    pointer-events: none !important;
 }
 
 /* H6: 短横线 */
@@ -9512,7 +9514,6 @@ body {
     transform: translateY(-50%) !important;
     color: var(--interactive-accent) !important;
     font-weight: bold !important;
-    pointer-events: none !important;
 }
 
 /* H3-H6 后缀图标 (Mask Image) */
@@ -9589,21 +9590,27 @@ body {
     border-radius: 6px;
     vertical-align: middle;
     background-image: none !important;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
 }
 
-.markdown-rendered :not(pre)>code:hover,
-.markdown-source-view.mod-cm6 .cm-inline-code:not(.cm-formatting):hover {
+.markdown-rendered :not(pre)>code {
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.markdown-rendered :not(pre)>code:hover {
     background-color: var(--interactive-accent) !important;
     color: #fff !important;
     border-color: var(--interactive-accent);
     box-shadow: 0 4px 12px color-mix(in srgb, var(--interactive-accent), transparent 50%);
     transform: translateY(-2px);
     text-decoration: none !important;
-    -webkit-text-fill-color: #fff !important;
-    z-index: 10;
+}
+
+.markdown-source-view.mod-cm6 .cm-inline-code:not(.cm-formatting):hover {
+    background-color: var(--interactive-accent) !important;
+    color: #fff !important;
+    border-color: var(--interactive-accent);
 }
 
 .markdown-source-view.mod-cm6 .cm-formatting-code {
@@ -9628,7 +9635,8 @@ body {
     background-repeat: no-repeat !important;
     background-size: unset !important;
     position: relative !important;
-    padding-top: 38px !important; /* 顶部留出 Mac 标题栏空间 */
+    padding-top: 38px !important;
+    /* 顶部留出 Mac 标题栏空间 */
     border-radius: 12px !important;
     border: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 85%) !important;
     background-color: var(--code-background) !important;
@@ -9646,8 +9654,8 @@ body {
     height: 32px !important;
     background-color: color-mix(in srgb, var(--interactive-accent), transparent 90%) !important;
     background-image: radial-gradient(circle, #ff5f56 5px, transparent 6px),
-                      radial-gradient(circle, #ffbd2e 5px, transparent 6px),
-                      radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
+        radial-gradient(circle, #ffbd2e 5px, transparent 6px),
+        radial-gradient(circle, #27c93f 5px, transparent 6px) !important;
     background-size: 14px 14px !important;
     background-position: 14px center, 34px center, 54px center !important;
     background-repeat: no-repeat !important;

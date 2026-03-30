@@ -9645,6 +9645,7 @@ body {
     white-space: pre !important;
     word-break: normal !important;
     overflow-wrap: normal !important;
+    /* 恢复切除隐藏方案，保持视觉整洁 */
     overflow: hidden !important;
     text-overflow: clip !important;
 }

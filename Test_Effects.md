@@ -101,3 +101,255 @@
 
 
 ![[Pasted image 20260330221101.png|799]]
+
+```mermaid
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': { 
+    'primaryColor': '#f8fafc', 
+    'primaryBorderColor': '#e2e8f0', 
+    'lineColor': '#94a3b8', 
+    'fontFamily': 'sans-serif'
+  }
+}}%%
+flowchart TD
+
+%% ================= 样式 =================
+classDef core fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
+classDef storage fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#581c87;
+classDef decision fill:#ffedd5,stroke:#ea580c,stroke-width:2px,color:#9a3412;
+classDef async fill:#ecfccb,stroke:#65a30d,stroke-width:2px,color:#365314;
+
+%% ================= 用户层 =================
+subgraph 用户层
+U[用户]:::core
+end
+
+%% ================= 接入层 =================
+subgraph 接入层
+API[评论服务 API]:::core
+end
+
+U --> API
+
+%% ================= 写链路 =================
+subgraph "写链路：评论写入 + 计数异步化"
+direction TB
+
+W1[接收评论请求]:::core
+W2[(MySQL 评论表)]:::storage
+W3[Redis 计数器 INCR]:::storage
+W4[发送 MQ 计数消息]:::async
+MQ[(Kafka / RocketMQ)]:::storage
+W5[消费者处理]:::async
+W6{SETNX 幂等校验}:::decision
+W7[批量聚合写入]:::core
+W8[(MySQL 更新计数)]:::storage
+
+W1 --> W2
+W1 --> W3
+W1 --> W4
+W4 --> MQ
+MQ --> W5
+W5 --> W6
+W6 -->|重复| X[丢弃]:::decision
+W6 -->|首次| W7
+W7 --> W8
+
+end
+
+API --> W1
+
+%% ================= 读链路 =================
+subgraph "读链路：评论查询 + 热度排序"
+direction TB
+
+R1[请求评论列表]:::core
+R2{是否带游标}:::decision
+R3[ZSet 查询热评]:::core
+R4[ZSet 游标分页]:::core
+ZSET[(Redis ZSet)]:::storage
+R5[Hash 批量查详情]:::storage
+R6[(MySQL 兜底)]:::storage
+R7[组装评论结构]:::core
+
+R1 --> R2
+R2 -->|否| R3
+R2 -->|是| R4
+
+R3 --> ZSET
+R4 --> ZSET
+
+R3 --> R5
+R4 --> R5
+
+R5 -.->|缓存未命中| R6
+R6 -.-> R5
+
+R5 --> R7
+
+end
+
+API --> R1
+
+%% ================= 评论结构 =================
+subgraph "评论模型（树结构）"
+C1[root_id]:::core
+C2[parent_id]:::core
+end
+
+W2 --> C1
+W2 --> C2
+
+%% ================= 一致性 =================
+subgraph "最终一致性"
+S1[定时任务对账]:::async
+S2[修复 Redis / DB 差异]:::core
+end
+
+S1 --> S2
+S2 --> W3
+S2 --> W8
+```
+
+
+
+```mermaid
+flowchart LR
+
+  
+
+%% ================== 用户层 ==================
+
+subgraph 用户侧
+
+U1[用户发评论]
+
+U2[客户端显示 +1]
+
+U1 --> U2
+
+end
+
+  
+
+%% ================== API 层 ==================
+
+subgraph API层
+
+A1[评论服务 API]
+
+end
+
+  
+
+%% ================== 缓存层 ==================
+
+subgraph 缓存层 Redis
+
+R1[计数器 INCR]
+
+R2{缓存命中?}
+
+R3[返回计数]
+
+R4[写入缓存 + TTL]
+
+end
+
+  
+
+%% ================== 消息队列 ==================
+
+subgraph MQ层
+
+M1[发送计数消息]
+
+M2[消费消息]
+
+end
+
+  
+
+%% ================== 计算层 ==================
+
+subgraph 聚合层
+
+C1{SETNX 幂等校验}
+
+C2[时间窗口聚合<br>5s 或 50条]
+
+end
+
+  
+
+%% ================== 存储层 ==================
+
+subgraph 数据库 MySQL
+
+D1[(更新 count + N)]
+
+D2[(查询 COUNT)]
+
+end
+
+  
+
+%% ================== 自愈 ==================
+
+subgraph 一致性保障
+
+S1[定期校验]
+
+S2{是否偏差过大}
+
+S3[DB 覆盖缓存]
+
+end
+
+  
+
+%% ================== 写链路 ==================
+
+U1 --> A1
+
+A1 --> R1
+
+A1 --> M1
+
+M1 --> M2
+
+M2 --> C1
+
+C1 -->|首次| C2
+
+C1 -->|重复| X[丢弃]
+
+C2 --> D1
+
+  
+
+%% ================== 读链路 ==================
+
+A1 --> R2
+
+R2 -->|命中| R3
+
+R2 -->|未命中| D2
+
+D2 --> R4
+
+R4 --> R3
+
+  
+
+%% ================== 自愈链路 ==================
+
+S1 --> S2
+
+S2 -->|是| S3
+
+S2 -->|否| Y[跳过]
+
+S3 --> R1
+```
